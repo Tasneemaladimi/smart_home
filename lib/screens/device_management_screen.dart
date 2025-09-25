@@ -91,7 +91,7 @@ class DeviceManagementScreen extends StatelessWidget {
                     "Add",
                     style: TextStyle(color: theme.textTheme.bodyMedium?.color),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (nameController.text.isNotEmpty &&
                         selectedIcon != null) {
                       Provider.of<DeviceProvider>(
@@ -122,6 +122,9 @@ class DeviceManagementScreen extends StatelessWidget {
         itemCount: devices.length,
         itemBuilder: (context, index) {
           final device = devices[index];
+          print(
+            'Device name: ${device['name']}, iconCodePoint: ${device['iconCodePoint']}',
+          );
           return Card(
             color: theme.cardColor, // حسب الثيم
             margin: const EdgeInsets.only(bottom: 12),
@@ -134,8 +137,11 @@ class DeviceManagementScreen extends StatelessWidget {
                 ),
                 leading: Icon(
                   IconData(
-                    device['iconCodePoint'],
-                    fontFamily: 'MaterialIcons',
+                    device['iconCodePoint'] is int
+                        ? device['iconCodePoint']
+                        : Icons.device_unknown.codePoint,
+
+                    fontFamily: device['iconFontFamily'] ?? 'MaterialIcons',
                   ),
                   color: theme.primaryColor,
                   size: 30,
